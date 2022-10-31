@@ -1,0 +1,79 @@
+openapi: 3.0.3
+info:
+  title: Student Performance ML Prediction API
+  description: >-
+    This API can be used to predict whether or not a student described by a set
+    of input features is a high quality student (by CMU admissions criteria)
+    with high probability.
+
+
+    Uses a backend cached pretrained ML model trained on a set of student data.
+  version: 1.0.0
+servers:
+  - url: https://127.0.0.5
+tags:
+  - name: predict
+    description: Used to predict student quality
+paths:
+  /predict:
+    get:
+      tags:
+        - predict
+      summary: Returns prediction of student quality
+      description: >-
+        Returns a boolean of whether or not the student is likely to be
+        considered high quality.
+      parameters:
+        - name: studytime
+          in: query
+          description: score representing how much time a student studys
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            format: int32
+        - name: absences
+          in: query
+          description: integer representing how many absences a student has each year
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            format: int32
+        - name: G1
+          in: query
+          description: score representing student performance from their first year
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 20
+            format: int32
+        - name: G2
+          in: query
+          description: score representing student performance from their second year
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Predict'
+        '400':
+          description: Malformed request
+        '422':
+          description: Query values do not satisfy accepted data ranges
+components:
+  schemas:
+    Predict:
+      type: object
+      properties:
+        high_quality:
+          type: boolean
+          example: true
