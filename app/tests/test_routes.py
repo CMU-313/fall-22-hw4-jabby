@@ -70,6 +70,7 @@ def test_invalid_studytime():
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
+#when the input for absences is invalid (not an integer between 0 and 93)
 def test_invalid_absences():
     app = Flask(__name__)
     configure_routes(app)
