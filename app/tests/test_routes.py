@@ -96,3 +96,44 @@ def test_invalid_absences():
     data={'G1':"10", 'G2':"10", 'Studytime':2, 'Absences':None}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
+def test_g1_input():
+    app = Flask(__name__)
+    configure_routes(app)
+    client = app.test_client()
+    url = '/predict'
+
+    #g1 input is not an integer
+    data={'G1':"K", 'G2':"18", 'Studytime':3, 'Absences':40}
+    response = client.get(url, query_string=data)
+    assert response.status_code == 400
+def test_g2_input():
+    app = Flask(__name__)
+    configure_routes(app)
+    client = app.test_client()
+    url = '/predict'
+
+    #g2 input is not an integer
+    data={'G1':"20", 'G2':"K", 'Studytime':3, 'Absences':40}
+    response = client.get(url, query_string=data)
+    assert response.status_code == 400
+def test_studytime_input():
+    app = Flask(__name__)
+    configure_routes(app)
+    client = app.test_client()
+    url = '/predict'
+
+    #Studytime input is not an integer
+    data={'G1':"20", 'G2':"18", 'Studytime':K, 'Absences':40}
+    response = client.get(url, query_string=data)
+    assert response.status_code == 400
+def test_absences_input():
+    app = Flask(__name__)
+    configure_routes(app)
+    client = app.test_client()
+    url = '/predict'
+
+    #Absences input is not an integer
+    data={'G1':"20", 'G2':"18", 'Studytime':3, 'Absences':K}
+    response = client.get(url, query_string=data)
+    assert response.status_code == 400
+
