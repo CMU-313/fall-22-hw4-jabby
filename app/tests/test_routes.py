@@ -102,7 +102,7 @@ def test_g1_input():
     client = app.test_client()
     url = '/predict'
 
-    #g1 input is not an integer
+    #g1 input is not an integer - test
     data={'G1':"K", 'G2':"18", 'Studytime':3, 'Absences':40}
     response = client.get(url, query_string=data)
     assert response.status_code == 400
