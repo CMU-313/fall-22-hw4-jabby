@@ -42,22 +42,18 @@ paths:
             format: int32
         - name: G1
           in: query
-          description: score representing student performance from their first year
+          description: score representing student performance from their first year as a string value between "0" and "20"
           required: true
           schema:
-            type: integer
-            minimum: 0
-            maximum: 20
-            format: int32
+            type: string 
+            format: byte
         - name: G2
           in: query
-          description: score representing student performance from their second year
+          description: score representing student performance from their second year as a string value between "0" and "20"
           required: true
           schema:
-            type: integer
-            format: int32
-            minimum: 0
-            maximum: 20
+            type: string
+            format: byte
       responses:
         '200':
           description: Success
