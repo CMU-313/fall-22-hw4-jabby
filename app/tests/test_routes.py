@@ -22,12 +22,12 @@ def test_invalid_G1():
     url = '/predict'
 
     #G1 too high
-    data={'G1':21, 'G2':5, 'Studytime':1, 'Absences':43}
+    data={'G1':"21", 'G2':"5", 'Studytime':1, 'Absences':43}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #G1 too low
-    data={'G1':-1, 'G2':5, 'Studytime':1, 'Absences':43}
+    data={'G1':"-1", 'G2':"5", 'Studytime':1, 'Absences':43}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
@@ -39,12 +39,12 @@ def test_invalid_G2():
     url = '/predict'
 
     #G1 too high
-    data={'G1':19, 'G2':22, 'Studytime':4, 'Absences':0}
+    data={'G1':"19", 'G2':"22", 'Studytime':4, 'Absences':0}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #G1 too low
-    data={'G1':19, 'G2':-5, 'Studytime':4, 'Absences':0}
+    data={'G1':"19", 'G2':"-5", 'Studytime':4, 'Absences':0}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
@@ -56,17 +56,17 @@ def test_invalid_studytime():
     url = '/predict'
 
     #studytime too high
-    data={'G1':20, 'G2':20, 'Studytime':5, 'Absences':0}
+    data={'G1':"20", 'G2':"20", 'Studytime':5, 'Absences':0}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #studytime too low
-    data={'G1':10, 'G2':10, 'Studytime':-1, 'Absences':40}
+    data={'G1':"10", 'G2':"10", 'Studytime':-1, 'Absences':40}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #studytime decimal
-    data={'G1':10, 'G2':10, 'Studytime':2.5, 'Absences':12}
+    data={'G1':"10", 'G2':"10", 'Studytime':2.5, 'Absences':12}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
@@ -78,21 +78,21 @@ def test_invalid_absences():
     url = '/predict'
 
     #absences too high (> 93)
-    data={'G1':8, 'G2':13, 'Studytime':1, 'Absences':100}
+    data={'G1':"8", 'G2':"13", 'Studytime':1, 'Absences':100}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #absences too low
-    data={'G1':18, 'G2':20, 'Studytime':3, 'Absences':-4}
+    data={'G1':"18", 'G2':"20", 'Studytime':3, 'Absences':-4}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #absences decimal
-    data={'G1':10, 'G2':10, 'Studytime':2, 'Absences':15.2}
+    data={'G1':"10", 'G2':"10", 'Studytime':2, 'Absences':15.2}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #absences non-numeric
-    data={'G1':10, 'G2':10, 'Studytime':2, 'Absences':None}
+    data={'G1':"10", 'G2':"10", 'Studytime':2, 'Absences':None}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
