@@ -207,3 +207,34 @@ def test_invalid_absences():
     data={'G1':"10", 'G2':"10", 'Studytime':2, 'Absences':None}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
+
+def test_data_format():
+    app = Flask(__name__)
+    configure_routes(app)
+    client = app.test_client()
+    url = '/predict'
+
+    #Data is a list
+    data=['G1',"8", 'G2',"13", 'Studytime',1, 'Absences',90]
+    response = client.get(url, query_string=data)
+    assert response.status_code == 400
+
+    #Data is a string
+    data= "G1,8, G2,13, Studytime,1, Absences,90"
+    response = client.get(url, query_string=data)
+    assert response.status_code == 400
+
+    #Data is a uses wrong feature names
+    data={'G10':"20", 'G22':"13", 'Studytime':1, 'Absences':90}
+    response = client.get(url, query_string=data)
+    assert response.status_code == 400
+
+    #Data doesnt use all 4 feature names
+    data={'G1':"20", 'G2':"13", 'Absences':90}
+    response = client.get(url, query_string=data)
+    assert response.status_code == 400
+
+
+
+
+
