@@ -2,6 +2,14 @@
 
 Please consult the [homework assignment](https://cmu-313.github.io//assignments/hw4) for additional context and instructions for this code.
 
+## Jabby HW4 ML Model Usage
+
+Our machine learning model uses 4 numerical features to evaluate if a given student should be classified as a "quality" student:
+- failures: the number of past class failures. Integer from 0 to 3 (inclusive). If the student failed more than 3 classes, still use failures=3.
+- absences: the number of school absences. Integer from 0 to 93 (inclusive). If the student has more than 93 absences, still use absences=93.
+- G1: first period grade. Integer from 0 to 20 (inclusive).
+- G2: second period grade. Integer from 0 to 20 (inclusive).
+
 ## pipenv
 
 [pipenv](https://pipenv.pypa.io/en/latest) is a packaging tool for Python that solves some common problems associated with the typical workflow using pip, virtualenv, and the good old requirements.txt.
