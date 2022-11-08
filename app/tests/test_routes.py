@@ -2,7 +2,6 @@ from flask import Flask
 
 from app.handlers.routes import configure_routes
 
-
 def test_base_route():
     app = Flask(__name__)
     configure_routes(app)
@@ -12,8 +11,7 @@ def test_base_route():
     response = client.get(url)
 
     assert response.status_code == 200
-    assert response.get_data() == b'try the predict route it is great!'
-
+    assert response.get_data() == b'to interact with this API, use the predict route'
 
 '''
 Test Cases - Valid Number and Format (status=200)
@@ -26,19 +24,22 @@ def test_valid_failures():
     url = '/predict'
 
     #failures at high edge
-    data={'failures':3, 'absences':11, 'G1':19, 'G2':2}
+    data={'failures':4, 'absences':11, 'G1':19, 'G2':2}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
+    assert 'high_quality' in response.get_json()
 
     #failures at low edge
-    data={'failures':0, 'absences':40, 'G1':10, 'G2':10}
+    data={'failures':1, 'absences':40, 'G1':10, 'G2':10}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
+    assert 'high_quality' in response.get_json()
 
     #failures in between
     data={'failures':2, 'absences':12, 'G1':10, 'G2':10}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
+    assert 'high_quality' in response.get_json()
 
 #when the input for absences is valid (integer in 0 <= n <= 93)
 def test_valid_absences():
@@ -51,16 +52,19 @@ def test_valid_absences():
     data={'failures':2, 'absences':93, 'G1':8, 'G2':13}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
+    assert 'high_quality' in response.get_json()
 
     #absences at low edge
     data={'failures':2, 'absences':0, 'G1':18, 'G2':20}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
+    assert 'high_quality' in response.get_json()
 
     #absences decimal
     data={'failures':1, 'absences':66, 'G1':10, 'G2':10}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
+    assert 'high_quality' in response.get_json()
 
 #when the input for G1 scores is valid (between 0 and 20)
 def test_valid_G1():
@@ -73,16 +77,19 @@ def test_valid_G1():
     data={'failures':2, 'absences':43, 'G1':20, 'G2':5}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
+    assert 'high_quality' in response.get_json()
 
     #G1 at low edge
     data={'failures':1, 'absences':4, 'G1':0, 'G2':3}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
+    assert 'high_quality' in response.get_json()
 
     #G1 in between
     data={'failures':2, 'absences':71, 'G1':8, 'G2':17}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
+    assert 'high_quality' in response.get_json()
 
 #when the input for G2 scores are valid (not between 0 and 20)
 def test_valid_G2():
@@ -95,16 +102,19 @@ def test_valid_G2():
     data={'failures':3, 'absences':7, 'G1':19, 'G2':20}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
+    assert 'high_quality' in response.get_json()
 
     #G2 at low edge
     data={'failures':1, 'absences':88, 'G1':18, 'G2':0}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
+    assert 'high_quality' in response.get_json()
 
     #G2 in between
-    data={'failures':0, 'absences':11, 'G1':2, 'G2':6}
+    data={'failures':1, 'absences':11, 'G1':2, 'G2':6}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
+    assert 'high_quality' in response.get_json()
 
 
 '''
@@ -117,8 +127,8 @@ def test_invalid_failures():
     client = app.test_client()
     url = '/predict'
 
-    #failures too high (>3)
-    data={'failures':4, 'absences':11, 'G1':19, 'G2':2}
+    #failures too high (>4)
+    data={'failures':5, 'absences':11, 'G1':19, 'G2':2}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
@@ -227,21 +237,6 @@ def test_data_format():
     configure_routes(app)
     client = app.test_client()
     url = '/predict'
-
-    #Data is a list
-    data=['failures',3, 'absences',11, 'G1',19, 'G2',2]
-    response = client.get(url, query_string=data)
-    assert response.status_code == 400
-
-    #Data is a string
-    data="failures:3, absences:11, G1:19, G2:2"
-    response = client.get(url, query_string=data)
-    assert response.status_code == 400
-
-    #Data is a set
-    data={'failures', 'absences', 'G1', 'G2'}
-    response = client.get(url, query_string=data)
-    assert response.status_code == 400
 
     #Data uses wrong feature names
     data={'failures':3, 'absences':11, 'G11':19, 'G22':2}
