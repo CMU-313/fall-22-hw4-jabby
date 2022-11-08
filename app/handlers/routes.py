@@ -15,7 +15,6 @@ def configure_routes(app):
     def hello():
         return "try the predict route it is great!"
 
-
     @app.route('/predict')
     def predict():
         #use entries from the query string here but could also use json
@@ -24,13 +23,32 @@ def configure_routes(app):
         G1 = request.args.get('G1')
         G2 = request.args.get('G2')
         
-        # TODO: check that all 4 features are provided (not None)
+        # status=400: check that all 4 features are provided (not None)
+        if failures==None or absences==None or G1==None or G2==None:
+            return 'Must provide failures, absences, G1, and G2', 400
+            
 
+        # status=422: check values are okay
+        def check422(var, vmin, vmax):
+            # must be int or can be parsed to int
+            val = None
+            if type(var)==int:
+                val = var
+            elif type(var)==str and var.isdigit():
+                val = int(var)
+            else:
+                return False
+            
+            # must not be a decimal
+            if int(val) != val:
+                return False
+            
+            # must be in the right ranges
+            return val>=vmin and val<=vmax
 
-        # TODO: check that all 4 features are the proper type (ints or can be parsed to ints)
-
-
-        # TODO: check that all 4 features are in the right ranges
+        if check422(failures, 0, 3) and check422(absences, 0, 93) \
+            and check422(G1, 0, 20) and check422(G2, 0, 20):
+            return 'values are not integers', 422
 
 
         # pass features as a query into the ML model
