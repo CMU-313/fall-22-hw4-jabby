@@ -46,8 +46,8 @@ def configure_routes(app):
             # must be in the right ranges
             return val>=vmin and val<=vmax
 
-        if check422(failures, 0, 3) and check422(absences, 0, 93) \
-            and check422(G1, 0, 20) and check422(G2, 0, 20):
+        if not (check422(failures, 0, 3) and check422(absences, 0, 93) \
+            and check422(G1, 0, 20) and check422(G2, 0, 20)):
             return 'values are not integers', 422
 
 
