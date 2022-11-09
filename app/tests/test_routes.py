@@ -61,7 +61,7 @@ def test_valid_absences():
     assert 'high_quality' in response.get_json()
 
     #absences decimal
-    data={'failures':0, 'absences':66, 'G1':10, 'G2':10}
+    data={'failures':1, 'absences':66, 'G1':10, 'G2':10}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
     assert 'high_quality' in response.get_json()
@@ -80,7 +80,7 @@ def test_valid_G1():
     assert 'high_quality' in response.get_json()
 
     #G1 at low edge
-    data={'failures':0, 'absences':4, 'G1':0, 'G2':3}
+    data={'failures':1, 'absences':4, 'G1':0, 'G2':3}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
     assert 'high_quality' in response.get_json()
@@ -105,7 +105,7 @@ def test_valid_G2():
     assert 'high_quality' in response.get_json()
 
     #G2 at low edge
-    data={'failures':0, 'absences':88, 'G1':18, 'G2':0}
+    data={'failures':1, 'absences':88, 'G1':18, 'G2':0}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
     assert 'high_quality' in response.get_json()
