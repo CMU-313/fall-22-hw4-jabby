@@ -36,7 +36,7 @@ def test_valid_failures():
     assert 'high_quality' in response.get_json()
 
     #failures in between
-    data={'failures':2, 'absences':12, 'G1':10, 'G2':10}
+    data={'failures':1, 'absences':12, 'G1':10, 'G2':10}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
     assert 'high_quality' in response.get_json()
@@ -49,19 +49,19 @@ def test_valid_absences():
     url = '/predict'
 
     #absences at high edge
-    data={'failures':2, 'absences':93, 'G1':8, 'G2':13}
+    data={'failures':1, 'absences':93, 'G1':8, 'G2':13}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
     assert 'high_quality' in response.get_json()
 
     #absences at low edge
-    data={'failures':2, 'absences':0, 'G1':18, 'G2':20}
+    data={'failures':1, 'absences':0, 'G1':18, 'G2':20}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
     assert 'high_quality' in response.get_json()
 
     #absences decimal
-    data={'failures':1, 'absences':66, 'G1':10, 'G2':10}
+    data={'failures':0, 'absences':66, 'G1':10, 'G2':10}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
     assert 'high_quality' in response.get_json()
@@ -74,19 +74,19 @@ def test_valid_G1():
     url = '/predict'
 
     #G1 at high edge
-    data={'failures':2, 'absences':43, 'G1':20, 'G2':5}
+    data={'failures':1, 'absences':43, 'G1':20, 'G2':5}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
     assert 'high_quality' in response.get_json()
 
     #G1 at low edge
-    data={'failures':1, 'absences':4, 'G1':0, 'G2':3}
+    data={'failures':0, 'absences':4, 'G1':0, 'G2':3}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
     assert 'high_quality' in response.get_json()
 
     #G1 in between
-    data={'failures':2, 'absences':71, 'G1':8, 'G2':17}
+    data={'failures':1, 'absences':71, 'G1':8, 'G2':17}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
     assert 'high_quality' in response.get_json()
@@ -99,13 +99,13 @@ def test_valid_G2():
     url = '/predict'
 
     #G2 at high edge
-    data={'failures':3, 'absences':7, 'G1':19, 'G2':20}
+    data={'failures':2, 'absences':7, 'G1':19, 'G2':20}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
     assert 'high_quality' in response.get_json()
 
     #G2 at low edge
-    data={'failures':1, 'absences':88, 'G1':18, 'G2':0}
+    data={'failures':0, 'absences':88, 'G1':18, 'G2':0}
     response = client.get(url, query_string=data)
     assert response.status_code == 200
     assert 'high_quality' in response.get_json()
@@ -138,7 +138,7 @@ def test_invalid_failures():
     assert response.status_code == 422
 
     #failures decimal
-    data={'failures':2.5, 'absences':12, 'G1':10, 'G2':10}
+    data={'failures':1.5, 'absences':12, 'G1':10, 'G2':10}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
@@ -155,22 +155,22 @@ def test_invalid_absences():
     url = '/predict'
 
     #absences too high (>93)
-    data={'failures':1, 'absences':100, 'G1':8, 'G2':13}
+    data={'failures':0, 'absences':100, 'G1':8, 'G2':13}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #absences too low
-    data={'failures':3, 'absences':-4, 'G1':18, 'G2':20}
+    data={'failures':2, 'absences':-4, 'G1':18, 'G2':20}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #absences decimal
-    data={'failures':2, 'absences':15.2, 'G1':10, 'G2':10}
+    data={'failures':1, 'absences':15.2, 'G1':10, 'G2':10}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #absences non-numeric
-    data={'failures':2, 'absences':'123abc', 'G1':10, 'G2':10}
+    data={'failures':1, 'absences':'123abc', 'G1':10, 'G2':10}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
@@ -182,22 +182,22 @@ def test_invalid_G1():
     url = '/predict'
 
     #G1 too high
-    data={'failures':1, 'absences':43, 'G1':21, 'G2':5}
+    data={'failures':0, 'absences':43, 'G1':21, 'G2':5}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #G1 too low
-    data={'failures':1, 'absences':43, 'G1':-1, 'G2':5}
+    data={'failures':0, 'absences':43, 'G1':-1, 'G2':5}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #G1 decimal
-    data={'failures':1, 'absences':43, 'G1':10.001, 'G2':5}
+    data={'failures':0, 'absences':43, 'G1':10.001, 'G2':5}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
     
     #G1 non-numeric
-    data={'failures':1, 'absences':43, 'G1':True, 'G2':5}
+    data={'failures':0, 'absences':43, 'G1':True, 'G2':5}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
@@ -209,22 +209,22 @@ def test_invalid_G2():
     url = '/predict'
 
     #G2 too high
-    data={'failures':2, 'absences':0, 'G1':19, 'G2':22}
+    data={'failures':1, 'absences':0, 'G1':19, 'G2':22}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #G2 too low
-    data={'failures':2, 'absences':3, 'G1':19, 'G2':-5}
+    data={'failures':1, 'absences':3, 'G1':19, 'G2':-5}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #G2 decimal
-    data={'failures':1, 'absences':43, 'G1':19, 'G2':0.123}
+    data={'failures':0, 'absences':43, 'G1':19, 'G2':0.123}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
     #G2 non-numeric
-    data={'failures':1, 'absences':43, 'G1':19, 'G2':'badinput'}
+    data={'failures':0, 'absences':43, 'G1':19, 'G2':'badinput'}
     response = client.get(url, query_string=data)
     assert response.status_code == 422
 
@@ -239,12 +239,12 @@ def test_data_format():
     url = '/predict'
 
     #Data uses wrong feature names
-    data={'failures':3, 'absences':11, 'G11':19, 'G22':2}
+    data={'failures':2, 'absences':11, 'G11':19, 'G22':2}
     response = client.get(url, query_string=data)
     assert response.status_code == 400
 
     #Data doesnt use all 4 feature names
-    data={'failures':3, 'G1':19, 'G2':2}
+    data={'failures':2, 'G1':19, 'G2':2}
     response = client.get(url, query_string=data)
     assert response.status_code == 400
 
